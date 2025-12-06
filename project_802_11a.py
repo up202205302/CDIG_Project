@@ -74,6 +74,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self.threshold = threshold = 0.56
         self.samp_rate = samp_rate = 20000000
         self.gain = gain = 20
+        self.fft_window = fft_window = window.rectangular(64)
         self.LO_freq = LO_freq = 2412000000
 
         ##################################################
@@ -81,12 +82,12 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         ##################################################
 
         # Create the options list
-        self._update_time_options = [1, 0.1, 0.01]
+        self._update_time_options = [1, 0.1, 0.01, 0.001]
         # Create the labels list
-        self._update_time_labels = ['1s', '100ms', '10ms']
+        self._update_time_labels = ['1s', '100ms', '10ms', '1ms']
         # Create the combo box
         self._update_time_tool_bar = Qt.QToolBar(self)
-        self._update_time_tool_bar.addWidget(Qt.QLabel("updt" + ": "))
+        self._update_time_tool_bar.addWidget(Qt.QLabel("Refresh Time (s)" + ": "))
         self._update_time_combo_box = Qt.QComboBox()
         self._update_time_tool_bar.addWidget(self._update_time_combo_box)
         for _label in self._update_time_labels: self._update_time_combo_box.addItem(_label)
@@ -97,7 +98,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         # Create the radio buttons
         self.top_layout.addWidget(self._update_time_tool_bar)
         self._threshold_range = qtgui.Range(0, 1, 0.01, 0.56, 50)
-        self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "sync_short_threshold", "counter_slider", float, QtCore.Qt.Horizontal)
+        self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Detection Threshold", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._threshold_win)
         # Create the options list
         self._samp_rate_options = [20000000, 10000000]
@@ -105,7 +106,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self._samp_rate_labels = ['20MHz', '10MHz']
         # Create the combo box
         # Create the radio buttons
-        self._samp_rate_group_box = Qt.QGroupBox("sampling_rate" + ": ")
+        self._samp_rate_group_box = Qt.QGroupBox("Sampling Rate (MHz)" + ": ")
         self._samp_rate_box = Qt.QVBoxLayout()
         class variable_chooser_button_group(Qt.QButtonGroup):
             def __init__(self, parent=None):
@@ -125,15 +126,40 @@ class project_802_11a(gr.top_block, Qt.QWidget):
             lambda i: self.set_samp_rate(self._samp_rate_options[i]))
         self.top_layout.addWidget(self._samp_rate_group_box)
         self._gain_range = qtgui.Range(0, 70, 1, 20, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "sdr_gain", "counter_slider", int, QtCore.Qt.Horizontal)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "SDR RX Gain (dB)", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_win)
+        # Create the options list
+        self._fft_window_options = [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [5.996879190206528e-05, 0.00020406953990459442, 0.0006772130727767944, 0.001602001953870058, 0.003182071726769209, 0.005701261572539806, 0.00952026154845953, 0.01507116761058569, 0.022847771644592285, 0.03339170664548874, 0.047272950410842896, 0.06506513059139252, 0.0873153805732727, 0.11451037973165512, 0.1470395177602768, 0.18515706062316895, 0.22894617915153503, 0.2782873809337616, 0.33283349871635437, 0.39199453592300415, 0.4549332857131958, 0.5205750465393066, 0.5876293182373047, 0.6546268463134766, 0.7199674844741821, 0.7819790840148926, 0.838983952999115, 0.889369785785675, 0.9316592216491699, 0.9645779132843018, 0.9871128797531128, 0.9985604882240295, 0.9985604882240295, 0.9871128797531128, 0.9645779132843018, 0.9316592812538147, 0.889369785785675, 0.838983952999115, 0.781978964805603, 0.7199673056602478, 0.6546267867088318, 0.5876294374465942, 0.5205749273300171, 0.4549333453178406, 0.3919943869113922, 0.33283352851867676, 0.27828726172447205, 0.22894620895385742, 0.18515697121620178, 0.14703957736492157, 0.11451032757759094, 0.08731535822153091, 0.0650651603937149, 0.04727296158671379, 0.03339171037077904, 0.02284776046872139, 0.015071170404553413, 0.009520268999040127, 0.005701260641217232, 0.0031820619478821754, 0.0016019823960959911, 0.0006772242486476898, 0.00020405743271112442, 5.996879190206528e-05]]
+        # Create the labels list
+        self._fft_window_labels = ['Rectangular Window', 'Blackman-Harris ']
+        # Create the combo box
+        # Create the radio buttons
+        self._fft_window_group_box = Qt.QGroupBox("FFT Window" + ": ")
+        self._fft_window_box = Qt.QVBoxLayout()
+        class variable_chooser_button_group(Qt.QButtonGroup):
+            def __init__(self, parent=None):
+                Qt.QButtonGroup.__init__(self, parent)
+            @pyqtSlot(int)
+            def updateButtonChecked(self, button_id):
+                self.button(button_id).setChecked(True)
+        self._fft_window_button_group = variable_chooser_button_group()
+        self._fft_window_group_box.setLayout(self._fft_window_box)
+        for i, _label in enumerate(self._fft_window_labels):
+            radio_button = Qt.QRadioButton(_label)
+            self._fft_window_box.addWidget(radio_button)
+            self._fft_window_button_group.addButton(radio_button, i)
+        self._fft_window_callback = lambda i: Qt.QMetaObject.invokeMethod(self._fft_window_button_group, "updateButtonChecked", Qt.Q_ARG("int", self._fft_window_options.index(i)))
+        self._fft_window_callback(self.fft_window)
+        self._fft_window_button_group.buttonClicked[int].connect(
+            lambda i: self.set_fft_window(self._fft_window_options[i]))
+        self.top_layout.addWidget(self._fft_window_group_box)
         # Create the options list
         self._LO_freq_options = [2412000000, 2417000000, 2422000000, 2427000000, 2432000000, 2437000000, 2442000000, 2447000000, 2452000000, 2457000000, 2462000000, 2467000000, 2472000000, 5180000000, 5200000000, 5220000000, 5240000000, 5260000000, 5280000000, 5300000000, 5320000000, 5500000000, 5520000000, 5540000000, 5560000000, 5580000000, 5600000000, 5620000000, 5640000000, 5660000000, 5680000000, 5700000000, 5720000000, 5745000000, 5765000000, 5785000000, 5805000000, 5825000000, 5860000000, 5870000000, 5875000000, 5880000000, 5885000000, 5890000000, 5895000000, 5900000000, 5905000000, 5910000000, 5920000000]
         # Create the labels list
         self._LO_freq_labels = ['Channel 1   | 802.11g | 2.412GHz', 'Channel 2   | 802.11g | 2.417GHz', 'Channel 3   | 802.11g | 2.422GHz', 'Channel 4   | 802.11g | 2.427GHz', 'Channel 5   | 802.11g | 2.432GHz', 'Channel 6   | 802.11g | 2.437GHz', 'Channel 7   | 802.11g | 2.442GHz', 'Channel 8   | 802.11g | 2.447GHz', 'Channel 9   | 802.11g | 2.452GHz', 'Channel 10| 802.11g | 2.457GHz', 'Channel 11| 802.11g | 2.462GHz', 'Channel 12| 802.11g | 2.467GHz', 'Channel 13| 802.11g | 2.472GHz', 'Channel 36| 802.11a | 5.180GHz', 'Channel 40| 802.11a | 5.200GHz', 'Channel 44| 802.11a | 5.220GHz', 'Channel 48| 802.11a | 5.240GHz', 'Channel 52| 802.11a | 5.260GHz', 'Channel 56| 802.11a | 5.280GHz', 'Channel 60| 802.11a | 5.300GHz', 'Channel 64| 802.11a | 5.320GHz', 'Channel 100| 802.11a | 5.500GHz', 'Channel 104| 802.11a | 5.520GHz', 'Channel 108| 802.11a | 5.540GHz', 'Channel 112| 802.11a | 5.560GHz', 'Channel 116| 802.11a | 5.580GHz', 'Channel 120| 802.11a | 5.600GHz', 'Channel 124| 802.11a | 5.620GHz', 'Channel 128| 802.11a | 5.640GHz', 'Channel 132| 802.11a | 5.660GHz', 'Channel 136| 802.11a | 5.680GHz', 'Channel 140| 802.11a | 5.700GHz', 'Channel 144| 802.11a | 5.720GHz', 'Channel 149| 802.11a | 5.745GHz', 'Channel 153| 802.11a | 5.765GHz', 'Channel 157| 802.11a | 5.785GHz', 'Channel 161| 802.11a | 5.805GHz', 'Channel 165| 802.11a | 5.825GHz', 'Channel 172| 802.11p | 5.860GHz', 'Channel 174| 802.11p | 5.870GHz', 'Channel 175| 802.11p | 5.875GHz', 'Channel 176| 802.11p | 5.880GHz', 'Channel 177| 802.11p | 5.885GHz', 'Channel 178| 802.11p | 5.890GHz', 'Channel 179| 802.11p | 5.895GHz', 'Channel 180| 802.11p | 5.900GHz', 'Channel 181| 802.11p | 5.905GHz', 'Channel 182| 802.11p | 5.910GHz', 'Channel 184| 802.11p | 5.920GHz']
         # Create the combo box
         self._LO_freq_tool_bar = Qt.QToolBar(self)
-        self._LO_freq_tool_bar.addWidget(Qt.QLabel("'LO_freq'" + ": "))
+        self._LO_freq_tool_bar.addWidget(Qt.QLabel("Center Frequency / 802.11 Channel" + ": "))
         self._LO_freq_combo_box = Qt.QComboBox()
         self._LO_freq_tool_bar.addWidget(self._LO_freq_combo_box)
         for _label in self._LO_freq_labels: self._LO_freq_combo_box.addItem(_label)
@@ -151,7 +177,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_time_sink_x_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0.set_y_axis(0, 10)
+        self.qtgui_time_sink_x_0.set_y_axis(0, 2)
 
         self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
@@ -348,11 +374,11 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self.fir_filter_xxx_0_0.declare_sample_delay(0)
         self.fir_filter_xxx_0 = filter.fir_filter_ccc(1, [1]*window_size)
         self.fir_filter_xxx_0.declare_sample_delay(0)
-        self.fft_vxx_0 = fft.fft_vcc(64, True, window.rectangular(64), True, 1)
+        self.fft_vxx_0 = fft.fft_vcc(64, True, fft_window, True, 1)
         self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*1, 64)
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 64)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, '/home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wifi.pcap', False)
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, '/home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wireshark_captures/wifi.pcap', False)
         self.blocks_file_sink_0.set_unbuffered(True)
         self.blocks_divide_xx_0 = blocks.divide_ff(1)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_gr_complex*1, 240)
@@ -371,7 +397,6 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self.msg_connect((self.ieee802_11_frame_equalizer_0, 'symbols'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
         self.msg_connect((self.ieee802_11_parse_mac_0, 'out'), (self.foo_wireshark_connector_0, 'in'))
         self.connect((self.blocks_complex_to_mag_0, 0), (self.blocks_divide_xx_0, 0))
-        self.connect((self.blocks_complex_to_mag_0, 0), (self.qtgui_time_sink_x_0, 0))
         self.connect((self.blocks_complex_to_mag_1, 0), (self.qtgui_sink_x_0, 0))
         self.connect((self.blocks_complex_to_mag_1_0, 0), (self.qtgui_sink_x_0_0, 0))
         self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.fir_filter_xxx_0_0, 0))
@@ -380,6 +405,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_delay_0, 0), (self.ieee802_11_sync_short_0, 0))
         self.connect((self.blocks_delay_0_0, 0), (self.ieee802_11_sync_long_0, 1))
         self.connect((self.blocks_divide_xx_0, 0), (self.ieee802_11_sync_short_0, 2))
+        self.connect((self.blocks_divide_xx_0, 0), (self.qtgui_time_sink_x_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.fir_filter_xxx_0, 0))
         self.connect((self.blocks_stream_to_vector_0, 0), (self.fft_vxx_0, 0))
         self.connect((self.blocks_vector_to_stream_0, 0), (self.qtgui_const_sink_x_0_0, 0))
@@ -449,6 +475,14 @@ class project_802_11a(gr.top_block, Qt.QWidget):
     def set_gain(self, gain):
         self.gain = gain
         self.iio_pluto_source_0_0.set_gain(0, self.gain)
+
+    def get_fft_window(self):
+        return self.fft_window
+
+    def set_fft_window(self, fft_window):
+        self.fft_window = fft_window
+        self._fft_window_callback(self.fft_window)
+        self.fft_vxx_0.set_window(self.fft_window)
 
     def get_LO_freq(self):
         return self.LO_freq

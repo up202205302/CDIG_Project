@@ -38,7 +38,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: ''
+    label: Center Frequency / 802.11 Channel
     label0: ''
     label1: ''
     label2: ''
@@ -95,7 +95,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: sdr_gain
+    label: SDR RX Gain (dB)
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: int
@@ -116,7 +116,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: sampling_rate
+    label: Sampling Rate (MHz)
     label0: 20MHz
     label1: 10MHz
     label2: '0'
@@ -173,7 +173,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: sync_short_threshold
+    label: Detection Threshold
     min_len: '50'
     orient: QtCore.Qt.Horizontal
     rangeType: float
@@ -194,7 +194,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: updt
+    label: Refresh Time (s)
     label0: 1s
     label1: 100ms
     label2: 10ms
@@ -221,7 +221,7 @@ blocks:
       177| 802.11p | 5.885GHz'',''Channel 178| 802.11p | 5.890GHz'',''Channel 179|
       802.11p | 5.895GHz'',''Channel 180| 802.11p | 5.900GHz'',''Channel 181| 802.11p
       | 5.905GHz'',''Channel 182| 802.11p | 5.910GHz'',''Channel 184| 802.11p | 5.920GHz'']'
-    num_opts: '3'
+    num_opts: '4'
     option0: '1'
     option1: '0.1'
     option2: '0.01'
@@ -402,7 +402,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: /home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wifi.pcap
+    file: /home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wireshark_captures/wifi.pcap
     type: byte
     unbuffered: 'True'
     vlen: '1'
@@ -432,7 +432,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2184, 152.0]
+    coordinate: [24, 440.0]
     rotation: 0
     state: disabled
 - name: blocks_multiply_xx_0

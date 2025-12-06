@@ -81,12 +81,12 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         ##################################################
 
         # Create the options list
-        self._update_time_options = [1, 0.1, 0.01]
+        self._update_time_options = [1, 0.1, 0.01, 0.001]
         # Create the labels list
-        self._update_time_labels = ['1s', '100ms', '10ms']
+        self._update_time_labels = ['1s', '100ms', '10ms', '1ms']
         # Create the combo box
         self._update_time_tool_bar = Qt.QToolBar(self)
-        self._update_time_tool_bar.addWidget(Qt.QLabel("updt" + ": "))
+        self._update_time_tool_bar.addWidget(Qt.QLabel("Refresh Time (s)" + ": "))
         self._update_time_combo_box = Qt.QComboBox()
         self._update_time_tool_bar.addWidget(self._update_time_combo_box)
         for _label in self._update_time_labels: self._update_time_combo_box.addItem(_label)
@@ -97,7 +97,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         # Create the radio buttons
         self.top_layout.addWidget(self._update_time_tool_bar)
         self._threshold_range = qtgui.Range(0, 1, 0.01, 0.56, 50)
-        self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "sync_short_threshold", "counter_slider", float, QtCore.Qt.Horizontal)
+        self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Detection Threshold", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._threshold_win)
         # Create the options list
         self._samp_rate_options = [20000000, 10000000]
@@ -105,7 +105,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self._samp_rate_labels = ['20MHz', '10MHz']
         # Create the combo box
         # Create the radio buttons
-        self._samp_rate_group_box = Qt.QGroupBox("sampling_rate" + ": ")
+        self._samp_rate_group_box = Qt.QGroupBox("Sampling Rate (MHz)" + ": ")
         self._samp_rate_box = Qt.QVBoxLayout()
         class variable_chooser_button_group(Qt.QButtonGroup):
             def __init__(self, parent=None):
@@ -125,7 +125,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
             lambda i: self.set_samp_rate(self._samp_rate_options[i]))
         self.top_layout.addWidget(self._samp_rate_group_box)
         self._gain_range = qtgui.Range(0, 70, 1, 20, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "sdr_gain", "counter_slider", int, QtCore.Qt.Horizontal)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "SDR RX Gain (dB)", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_win)
         # Create the options list
         self._LO_freq_options = [2412000000, 2417000000, 2422000000, 2427000000, 2432000000, 2437000000, 2442000000, 2447000000, 2452000000, 2457000000, 2462000000, 2467000000, 2472000000, 5180000000, 5200000000, 5220000000, 5240000000, 5260000000, 5280000000, 5300000000, 5320000000, 5500000000, 5520000000, 5540000000, 5560000000, 5580000000, 5600000000, 5620000000, 5640000000, 5660000000, 5680000000, 5700000000, 5720000000, 5745000000, 5765000000, 5785000000, 5805000000, 5825000000, 5860000000, 5870000000, 5875000000, 5880000000, 5885000000, 5890000000, 5895000000, 5900000000, 5905000000, 5910000000, 5920000000]
@@ -133,7 +133,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self._LO_freq_labels = ['Channel 1   | 802.11g | 2.412GHz', 'Channel 2   | 802.11g | 2.417GHz', 'Channel 3   | 802.11g | 2.422GHz', 'Channel 4   | 802.11g | 2.427GHz', 'Channel 5   | 802.11g | 2.432GHz', 'Channel 6   | 802.11g | 2.437GHz', 'Channel 7   | 802.11g | 2.442GHz', 'Channel 8   | 802.11g | 2.447GHz', 'Channel 9   | 802.11g | 2.452GHz', 'Channel 10| 802.11g | 2.457GHz', 'Channel 11| 802.11g | 2.462GHz', 'Channel 12| 802.11g | 2.467GHz', 'Channel 13| 802.11g | 2.472GHz', 'Channel 36| 802.11a | 5.180GHz', 'Channel 40| 802.11a | 5.200GHz', 'Channel 44| 802.11a | 5.220GHz', 'Channel 48| 802.11a | 5.240GHz', 'Channel 52| 802.11a | 5.260GHz', 'Channel 56| 802.11a | 5.280GHz', 'Channel 60| 802.11a | 5.300GHz', 'Channel 64| 802.11a | 5.320GHz', 'Channel 100| 802.11a | 5.500GHz', 'Channel 104| 802.11a | 5.520GHz', 'Channel 108| 802.11a | 5.540GHz', 'Channel 112| 802.11a | 5.560GHz', 'Channel 116| 802.11a | 5.580GHz', 'Channel 120| 802.11a | 5.600GHz', 'Channel 124| 802.11a | 5.620GHz', 'Channel 128| 802.11a | 5.640GHz', 'Channel 132| 802.11a | 5.660GHz', 'Channel 136| 802.11a | 5.680GHz', 'Channel 140| 802.11a | 5.700GHz', 'Channel 144| 802.11a | 5.720GHz', 'Channel 149| 802.11a | 5.745GHz', 'Channel 153| 802.11a | 5.765GHz', 'Channel 157| 802.11a | 5.785GHz', 'Channel 161| 802.11a | 5.805GHz', 'Channel 165| 802.11a | 5.825GHz', 'Channel 172| 802.11p | 5.860GHz', 'Channel 174| 802.11p | 5.870GHz', 'Channel 175| 802.11p | 5.875GHz', 'Channel 176| 802.11p | 5.880GHz', 'Channel 177| 802.11p | 5.885GHz', 'Channel 178| 802.11p | 5.890GHz', 'Channel 179| 802.11p | 5.895GHz', 'Channel 180| 802.11p | 5.900GHz', 'Channel 181| 802.11p | 5.905GHz', 'Channel 182| 802.11p | 5.910GHz', 'Channel 184| 802.11p | 5.920GHz']
         # Create the combo box
         self._LO_freq_tool_bar = Qt.QToolBar(self)
-        self._LO_freq_tool_bar.addWidget(Qt.QLabel("'LO_freq'" + ": "))
+        self._LO_freq_tool_bar.addWidget(Qt.QLabel("Center Frequency / 802.11 Channel" + ": "))
         self._LO_freq_combo_box = Qt.QComboBox()
         self._LO_freq_tool_bar.addWidget(self._LO_freq_combo_box)
         for _label in self._LO_freq_labels: self._LO_freq_combo_box.addItem(_label)
@@ -352,7 +352,7 @@ class project_802_11a(gr.top_block, Qt.QWidget):
         self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*1, 64)
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 64)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, '/home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wifi.pcap', False)
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, '/home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wireshark_captures/wifi.pcap', False)
         self.blocks_file_sink_0.set_unbuffered(True)
         self.blocks_divide_xx_0 = blocks.divide_ff(1)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_gr_complex*1, 240)

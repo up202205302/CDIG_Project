@@ -38,7 +38,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: ''
+    label: Center Frequency / 802.11 Channel
     label0: ''
     label1: ''
     label2: ''
@@ -87,7 +87,64 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1816, 56.0]
+    coordinate: [1816, 80.0]
+    rotation: 0
+    state: enabled
+- name: fft_window
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: FFT Window
+    label0: Rectangular Window
+    label1: 'Blackman-Harris '
+    label2: '0'
+    label3: 1ms
+    label4: ''
+    labels: '[''Channel 1   | 802.11g | 2.412GHz'',''Channel 2   | 802.11g | 2.417GHz'',''Channel
+      3   | 802.11g | 2.422GHz'',''Channel 4   | 802.11g | 2.427GHz'',''Channel 5   |
+      802.11g | 2.432GHz'',''Channel 6   | 802.11g | 2.437GHz'',''Channel 7   | 802.11g
+      | 2.442GHz'',''Channel 8   | 802.11g | 2.447GHz'',''Channel 9   | 802.11g |
+      2.452GHz'',''Channel 10| 802.11g | 2.457GHz'',''Channel 11| 802.11g | 2.462GHz'',''Channel
+      12| 802.11g | 2.467GHz'',''Channel 13| 802.11g | 2.472GHz'',''Channel 36| 802.11a
+      | 5.180GHz'',''Channel 40| 802.11a | 5.200GHz'',''Channel 44| 802.11a | 5.220GHz'',''Channel
+      48| 802.11a | 5.240GHz'',''Channel 52| 802.11a | 5.260GHz'',''Channel 56| 802.11a
+      | 5.280GHz'',''Channel 60| 802.11a | 5.300GHz'',''Channel 64| 802.11a | 5.320GHz'',''Channel
+      100| 802.11a | 5.500GHz'',''Channel 104| 802.11a | 5.520GHz'',''Channel 108|
+      802.11a | 5.540GHz'',''Channel 112| 802.11a | 5.560GHz'',''Channel 116| 802.11a
+      | 5.580GHz'',''Channel 120| 802.11a | 5.600GHz'',''Channel 124| 802.11a | 5.620GHz'',''Channel
+      128| 802.11a | 5.640GHz'',''Channel 132| 802.11a | 5.660GHz'',''Channel 136|
+      802.11a | 5.680GHz'',''Channel 140| 802.11a | 5.700GHz'',''Channel 144| 802.11a
+      | 5.720GHz'',''Channel 149| 802.11a | 5.745GHz'',''Channel 153| 802.11a | 5.765GHz'',''Channel
+      157| 802.11a | 5.785GHz'',''Channel 161| 802.11a | 5.805GHz'',''Channel 165|
+      802.11a | 5.825GHz'',''Channel 172| 802.11p | 5.860GHz'',''Channel 174| 802.11p
+      | 5.870GHz'',''Channel 175| 802.11p | 5.875GHz'',''Channel 176| 802.11p | 5.880GHz'',''Channel
+      177| 802.11p | 5.885GHz'',''Channel 178| 802.11p | 5.890GHz'',''Channel 179|
+      802.11p | 5.895GHz'',''Channel 180| 802.11p | 5.900GHz'',''Channel 181| 802.11p
+      | 5.905GHz'',''Channel 182| 802.11p | 5.910GHz'',''Channel 184| 802.11p | 5.920GHz'']'
+    num_opts: '2'
+    option0: window.rectangular(64)
+    option1: window.blackmanharris(64)
+    option2: '0'
+    option3: '0.001'
+    option4: '4'
+    options: '[2412000000, 2417000000, 2422000000, 2427000000, 2432000000, 2437000000,
+      2442000000, 2447000000, 2452000000, 2457000000, 2462000000, 2467000000, 2472000000,
+      5180000000, 5200000000, 5220000000, 5240000000, 5260000000, 5280000000, 5300000000,
+      5320000000, 5500000000, 5520000000, 5540000000, 5560000000, 5580000000, 5600000000,
+      5620000000, 5640000000, 5660000000, 5680000000, 5700000000, 5720000000, 5745000000,
+      5765000000, 5785000000, 5805000000, 5825000000, 5860000000, 5870000000, 5875000000,
+      5880000000, 5885000000, 5890000000, 5895000000, 5900000000, 5905000000, 5910000000,
+      5920000000]'
+    orient: Qt.QVBoxLayout
+    type: raw
+    value: window.rectangular(64)
+    widget: radio_buttons
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1816, 988.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -95,7 +152,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: sdr_gain
+    label: SDR RX Gain (dB)
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: int
@@ -108,7 +165,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1816, 192.0]
+    coordinate: [1816, 216.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -116,7 +173,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: sampling_rate
+    label: Sampling Rate (MHz)
     label0: 20MHz
     label1: 10MHz
     label2: '0'
@@ -165,7 +222,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1816, 708.0]
+    coordinate: [1816, 732.0]
     rotation: 0
     state: enabled
 - name: threshold
@@ -173,7 +230,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: sync_short_threshold
+    label: Detection Threshold
     min_len: '50'
     orient: QtCore.Qt.Horizontal
     rangeType: float
@@ -186,7 +243,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1816, 336.0]
+    coordinate: [1816, 352.0]
     rotation: 0
     state: enabled
 - name: update_time
@@ -194,7 +251,7 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: updt
+    label: Refresh Time (s)
     label0: 1s
     label1: 100ms
     label2: 10ms
@@ -221,7 +278,7 @@ blocks:
       177| 802.11p | 5.885GHz'',''Channel 178| 802.11p | 5.890GHz'',''Channel 179|
       802.11p | 5.895GHz'',''Channel 180| 802.11p | 5.900GHz'',''Channel 181| 802.11p
       | 5.905GHz'',''Channel 182| 802.11p | 5.910GHz'',''Channel 184| 802.11p | 5.920GHz'']'
-    num_opts: '3'
+    num_opts: '4'
     option0: '1'
     option1: '0.1'
     option2: '0.01'
@@ -255,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1816, 896.0]
+    coordinate: [1816, 912.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_0
@@ -402,7 +459,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: /home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wifi.pcap
+    file: /home/joao/Documents/feup/masters/1st/1sem/cdig/project/project_git/week7/wireshark_captures/wifi.pcap
     type: byte
     unbuffered: 'True'
     vlen: '1'
@@ -432,7 +489,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2184, 152.0]
+    coordinate: [24, 440.0]
     rotation: 0
     state: disabled
 - name: blocks_multiply_xx_0
@@ -502,7 +559,7 @@ blocks:
     nthreads: '1'
     shift: 'True'
     type: complex
-    window: window.rectangular(64)
+    window: fft_window
   states:
     bus_sink: false
     bus_source: false
@@ -1086,7 +1143,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 104.0]
+    coordinate: [264, 0.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -1176,20 +1233,19 @@ blocks:
     width8: '1'
     width9: '1'
     ylabel: Amplitude
-    ymax: '10'
+    ymax: '2'
     ymin: '0'
     yunit: '""'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1360, 208.0]
+    coordinate: [1424, 192.0]
     rotation: 0
     state: enabled
 
 connections:
 - [blocks_complex_to_mag_0, '0', blocks_divide_xx_0, '0']
-- [blocks_complex_to_mag_0, '0', qtgui_time_sink_x_0, '0']
 - [blocks_complex_to_mag_1, '0', qtgui_sink_x_0, '0']
 - [blocks_complex_to_mag_1_0, '0', qtgui_sink_x_0_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', fir_filter_xxx_0_0, '0']
@@ -1200,6 +1256,7 @@ connections:
 - [blocks_delay_0_0, '0', ieee802_11_sync_long_0, '1']
 - [blocks_divide_xx_0, '0', ieee802_11_sync_short_0, '2']
 - [blocks_divide_xx_0, '0', pad_sink_0, '0']
+- [blocks_divide_xx_0, '0', qtgui_time_sink_x_0, '0']
 - [blocks_multiply_xx_0, '0', fir_filter_xxx_0, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
 - [blocks_vector_to_stream_0, '0', qtgui_const_sink_x_0_0, '0']
